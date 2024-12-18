@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Register - QuickBus</title>
+   
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            color: #333;
+            scroll-behavior: smooth;
+            background: url('https://images.unsplash.com/photo-1506748686213-3951a48cdd4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjY0MHwwfDF8c2VhY2h8MHx8b3V0ZG9vcnxlbnwwfHx8fDE2Nzg0MjUyNzA&ixlib=rb-1.2.1&q=80') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            background-attachment: fixed;
+        }
+        header,
+        footer {
+            background-color: rgba(44, 62, 80, 0.9);
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        h1 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            opacity: 0;
+            animation: fadeIn 2s forwards 0.5s;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .form-container {
+            max-width: 400px;
+            width: 100%;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            animation: fadeIn 2s forwards 1s;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            margin-bottom: 6px;
+            display: block;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            background-color: #f0f0f0;
+        }
+
+        .form-group input[type="submit"] {
+            background-color: #16a085;
+            color: white;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: #1abc9c;
+            transform: scale(1.05);
+        }
+
+        .form-icon {
+            margin-right: 8px;
+        }
+
+        footer p {
+            font-size: 12px;
+            margin-top: 15px;
+        }
+
+        #scrollTopBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #16a085;
+            color: white;
+            padding: 12px;
+            border-radius: 50%;
+            display: none;
+            cursor: pointer;
+            z-index: 1000;
+            transition: opacity 0.3s;
+        }
+
+        #scrollTopBtn:hover {
+            background-color: #1abc9c;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .login-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #16a085;
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Register for QuickBus</h1>
+        <p>Join QuickBus for an easy and convenient travel experience.</p>
+    </header>
+
+    <main>
+        <div class="form-container">
+            <form id="registration-form" method="POST" novalidate>
+                <div class="form-group">
+                    <label for="full-name"><i class="fas fa-user form-icon"></i> Full Name:</label>
+                    <input type="text" id="full-name" name="full-name" class="form-control" required placeholder="Enter your full name">
+                    <div class="invalid-feedback">
+                        Please provide a valid name.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope form-icon"></i> Email:</label>
+                    <input type="email" id="email" name="email" class="form-control" required placeholder="Enter your email address">
+                    <div class="invalid-feedback">
+                        Please provide a valid email.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock form-icon"></i> Password:</label>
+                    <input type="password" id="password" name="password" class="form-control" required placeholder="Choose a password">
+                    <div class="invalid-feedback">
+                        Please provide a valid password (at least 6 characters).
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="date-of-birth"><i class="fas fa-calendar-alt form-icon"></i> Date of Birth:</label>
+                    <input type="date" id="date-of-birth" name="date-of-birth" class="form-control" required>
+                    <div class="invalid-feedback">
+                        Please provide your date of birth.
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender"><i class="fas fa-venus-mars form-icon"></i> Gender:</label>
+                    <select id="gender" name="gender" class="form-control" required>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Please select your gender.
+                    </div>
+                </div>
+
+                <input type="submit" value="Register" class="btn btn-primary">
+
+                <div class="login-link">
+                    <p>Already have an account? <a href="login.html">Login</a></p>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 QuickBus. All rights reserved.</p>
+    </footer>
+
+    <button id="scrollTopBtn" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+
+        window.onscroll = function () {
+            let scrollBtn = document.getElementById("scrollTopBtn");
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                scrollBtn.style.display = "block";
+            } else {
+                scrollBtn.style.display = "none";
+            }
+        };
+
+        function scrollToTop() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+
+        (function () {
+            'use strict'
+            window.addEventListener('load', function () {
+                var forms = document.getElementsByClassName('needs-validation')
+
+                Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+            }, false)
+        })();
+    </script>
+
+</body>
+
+</html>

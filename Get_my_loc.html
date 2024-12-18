@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QuickBus - Locate Your Bus</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .container {
+            margin-top: 30px;
+        }
+
+        #map {
+            height: 400px;
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .row {
+            margin-top: 30px;
+        }
+
+        #canvas {
+            width: 100%;
+            height: 300px;
+            background-color: #fff;
+            border: 2px solid #2c3e50;
+            border-radius: 10px;
+        }
+
+        .card {
+            margin-top: 20px;
+        }
+
+        .card-body {
+            text-align: center;
+        }
+
+        .btn {
+            background-color: #16a085;
+            color: white;
+            font-size: 18px;
+        }
+
+        .btn:hover {
+            background-color: #1abc9c;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Find Your Bus Location</h1>
+    </header>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>Locate Your Current Position</h3>
+                        <p>Click the button below to find your current location, and see where the bus is located!</p>
+                        <button class="btn" id="findLocationBtn">Find My Location</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div id="map"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Draw Your Journey on Canvas</h3>
+                <canvas id="canvas"></canvas>
+                <button class="btn" id="drawPathBtn">Draw Path</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap and Leaflet.js -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <script>
+        let map;
+        let userLocation;
+
+        // Initialize Leaflet Map
+        function initMap() {
+            map = L.map('map').setView([51.505, -0.09], 13); // Default position (London) and zoom level
+
+            // Tile Layer for the map (OpenStreetMap)
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Try HTML5 geolocation to get user's current location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    };
+                    map.setView([userLocation.lat, userLocation.lng], 13); // Move map to user's location
+
+                    // Add marker for user's location
+                    L.marker([userLocation.lat, userLocation.lng]).addTo(map)
+                        .bindPopup("Your Location")
+                        .openPopup();
+                }, function (error) {
+                    handleGeolocationError(error);
+                }, {
+                    enableHighAccuracy: true, // Request high accuracy
+                    timeout: 10000,            // Set a timeout (in ms)
+                    maximumAge: 0              // Don't use cached location
+                });
+            } else {
+                alert("Error: Your browser doesn't support geolocation.");
+            }
+        }
+
+        // Handle geolocation errors
+        function handleGeolocationError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("User denied the request for Geolocation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    alert("The request to get user location timed out.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("An unknown error occurred.");
+                    break;
+            }
+        }
+
+        // Draw on Canvas
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        document.getElementById("drawPathBtn").addEventListener("click", function () {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+            ctx.beginPath();
+            ctx.moveTo(50, 50);
+            ctx.lineTo(300, 200);
+            ctx.lineTo(500, 100);
+            ctx.strokeStyle = "#3498db";
+            ctx.lineWidth = 5;
+            ctx.stroke();
+        });
+
+        // Find current location
+        document.getElementById("findLocationBtn").addEventListener("click", function () {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const userPos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    };
+
+                    // Add marker for user's location
+                    L.marker([userPos.lat, userPos.lng]).addTo(map)
+                        .bindPopup("Your Location")
+                        .openPopup();
+
+                    map.setView([userPos.lat, userPos.lng], 13); // Move map to user's location
+                });
+            }
+        });
+
+        // Initialize map after page load
+        window.onload = function () {
+            initMap();
+        };
+    </script>
+</body>
+</html>
