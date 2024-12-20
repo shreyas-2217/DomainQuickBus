@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Contact Us - QuickBus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header, footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
+            gap: 20px;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            flex: 1;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #map {
+            flex: 1;
+            height: 500px; /* Fixed height for the map */
+            border-radius: 10px;
+        }
+
+        #canvas {
+            flex: 1;
+            height: 500px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: block;
+            color: #333;
+        }
+
+        input[type="text"], input[type="email"], input[type="date"], textarea {
+            width: 80%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="submit"] {
+            background-color: #16a085;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 40%;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #1abc9c;
+        }
+
+        footer p {
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        #scrollTopBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #16a085;
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            display: none;
+            cursor: pointer;
+        }
+
+        #scrollTopBtn:hover {
+            background-color: #1abc9c;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Contact Us</h1>
+        <p>We'd love to hear your thoughts! Please fill out the form below to send us your feedback about your journey with QuickBus.</p>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="contact-form">
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label for="full-name"><i class="fas fa-user form-icon"></i> Full Name:</label>
+                        <input type="text" id="full-name" name="full-name" required placeholder="Your Full Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email"><i class="fas fa-envelope form-icon"></i> Email:</label>
+                        <input type="email" id="email" name="email" required placeholder="Your Email Address">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date"><i class="fas fa-calendar-alt form-icon"></i> Travel Date:</label>
+                        <input type="date" id="date" name="date">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feedback"><i class="fas fa-comment-dots form-icon"></i> Feedback or Comments:</label>
+                        <textarea id="feedback" name="feedback" required placeholder="Your Feedback..."></textarea>
+                    </div>
+
+                    <input type="submit" value="Submit Feedback">
+                </form>
+            </div>
+            <div id="map"></div>
+        </div>
+        <div class="container">
+            <!-- Canvas for graphics -->
+            <canvas id="canvas" width="800" height="600"></canvas>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 QuickBus. All rights Reserved.</p>
+    </footer>
+
+    <button id="scrollTopBtn" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+
+    <script>
+        // Scroll-to-top button visibility
+        window.onscroll = function() {
+            let scrollBtn = document.getElementById("scrollTopBtn");
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                scrollBtn.style.display = "block";
+            } else {
+                scrollBtn.style.display = "none";
+            }
+        };
+
+        function scrollToTop() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+
+        // Initialize the map
+        const mapOptions = {
+            center: [12.933013, 77.606309],
+            zoom: 15,
+        };
+        const map = L.map('map', mapOptions);
+
+        // Add the base tile layer to the map
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 20,
+            attribution: '©OpenStreetMap',
+        }).addTo(map);
+
+        // Define custom icons for markers
+        const customIcon = L.icon({
+            iconUrl: "Bus-Icon-PNG-Pic.png",
+            iconSize: [40, 40],
+        });
+
+        const customIcon2 = L.icon({
+            iconUrl: "70770.png",
+            iconSize: [40, 40],
+        });
+
+        const locations = [
+            {
+                id: 1,
+                lat: 12.978026,
+                long: 77.572405,
+                src: 'logo.webp',
+                title: "Pickup Point",
+                url: "index.html",
+            },
+        ];
+
+        const popupOptions = {
+            closeButton: false,
+        };
+
+        locations.forEach((location) => {
+            L.marker([location.lat, location.long], { icon: customIcon })
+                .addTo(map)
+                .on('mouseover', (event) => {
+                    event.target
+                        .bindPopup(
+                            `<div class="card">
+                                <img src="${location.src}" width="180" height="80" alt="${location.title}">
+                                <h3>${location.title}</h3>
+                            </div>`,
+                            popupOptions
+                        )
+                        .openPopup();
+                })
+                .on('mouseout', (event) => {
+                    event.target.closePopup();
+                })
+                .on('click', () => {
+                    if (location.url) {
+                        window.open(location.url);
+                    }
+                });
+        });
+
+        let marker, circle, isZoomed = false;
+
+        navigator.geolocation.watchPosition(onLocationFound, onLocationError);
+
+        function onLocationFound(position) {
+            const { latitude: lat, longitude: lng, accuracy } = position.coords;
+
+            if (marker) {
+                map.removeLayer(marker);
+                map.removeLayer(circle);
+            }
+
+            marker = L.marker([lat, lng], { icon: customIcon2 }).addTo(map);
+            circle = L.circle([lat, lng], { radius: accuracy }).addTo(map);
+
+            marker.bindPopup("Shreyas V").openPopup();
+
+            L.popup()
+                .setLatLng([lat, lng])
+                .setContent("<p>You are here</p>")
+                .openOn(map);
+
+            if (!isZoomed) {
+                isZoomed = true;
+                map.fitBounds(circle.getBounds());
+            }
+
+            map.setView([lat, lng]);
+        }
+
+        function onLocationError(error) {
+            if (error.code === 1) {
+                alert("Please allow geolocation access");
+            } else {
+                alert("Cannot get current location");
+            }
+        }
+
+        // Graphics on the Canvas element
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        // Draw a rectangle
+        ctx.fillStyle = "#3498db";
+        ctx.fillRect(50, 50, 200, 100);
+
+        // Draw a circle
+        ctx.beginPath();
+        ctx.arc(400, 100, 50, 0, 2 * Math.PI);
+        ctx.fillStyle = "#e74c3c";
+        ctx.fill();
+
+        // Draw a line
+        ctx.beginPath();
+        ctx.moveTo(100, 300);
+        ctx.lineTo(600, 300);
+        ctx.strokeStyle = "#2ecc71";
+        ctx.lineWidth = 5;
+        ctx.stroke();
+
+        // Draw text
+        ctx.font = "30px Arial";
+        ctx.fillStyle = "black";
+        ctx.fillText("QuickBus", 300, 500);
+
+    </script>
+
+</body>
+</html>

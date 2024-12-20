@@ -140,6 +140,22 @@
             cursor: pointer;
         }
 
+        .book-btn {
+            padding: 12px 25px;
+            background-color: #FF4500;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .book-btn:hover {
+            background-color: #e03e00;
+        }
+
         @media screen and (max-width: 768px) {
             .card {
                 width: 100%;
@@ -166,8 +182,18 @@
         <div class="modal-content">
             <span class="close-btn">&times;</span>
             <h2 id="modalTitle"></h2>
-            <p id="modalDescription"></p>
-            <img id="modalImage" src="" alt="" style="width:80%; height:auto;"/>
+            <form>
+                <h3>Choose Time Slot</h3>
+                <input id="time1" name="time" value="12:00" type="radio"><label for="time1">12:00</label>
+                <input id="time2" name="time" value="18:00" type="radio"><label for="time2">18:00</label>
+                <input id="time3" name="time" value="20:30" type="radio"><label for="time3">20:30</label>
+                <input id="time4" name="time" value="21:00" type="radio"><label for="time4">21:00</label>
+                <input id="time5" name="time" value="22:45" type="radio"><label for="time5">22:45</label>
+                <h3>Choose Date Slot</h3>
+
+                <input id="date" type="date">
+            </form>
+            <button class="book-btn" id="bookBtn" onclick="bookTicket()">Book Ticket</button>
         </div>
     </div>
 
@@ -188,7 +214,7 @@
                 image: "https://c1.staticflickr.com/7/6237/6336917600_dd20e4f10b_b.jpg"
             },
             {
-                name: "Kerala",
+                name: "Rameshwaram",
                 from: "Pune",
                 time: "6AM",
                 date: "05/12/2024",
@@ -230,16 +256,17 @@
                 image: "https://cdn.britannica.com/91/110191-050-7BCFD56B/Victoria-Memorial-Hall-Kolkata-India.jpg"
             }
         ];
+
         cities.forEach((city, index) => {
             let cardHtml = `
-                <div class="card ${city.name === 'Mumbai' ? 'prime-location' : ''}" onclick="openModal('${city.name}', '${city.from}', '${city.time}', '${city.date}', '${city.image}')">
+                <div class="card ${city.name === 'Mumbai' ? 'prime-location' : ''}" onclick="openModal('${city.from}', '${city.name}')">
                     <div class="card-image">
                         <img src="${city.image}" alt="${city.name}">
                     </div>
                     <div class="category">${city.name}</div>
-                    <div class="heading">${city.from} - ${city.name} <br> ${city.time} • ${city.date}</div>
+                    <div class="heading">${city.from} - ${city.name}</div>
                 </div>`;
-            
+
             if (index < 5) { 
                 document.getElementById('cards').innerHTML += cardHtml;
             } else { 
@@ -247,12 +274,24 @@
             }
         });
 
-        function openModal(name, from, time, date, image) {
-            document.getElementById('modalTitle').innerText = `${from} - ${name}`;
-            document.getElementById('modalDescription').innerText = `Departure: ${time} • Date: ${date}`;
-            document.getElementById('modalImage').src = image;
+        let selectedFrom = '';
+        let selectedDestination = '';
 
+        function openModal(from, destination) {
+            selectedFrom = from;
+            selectedDestination = destination;
+
+            document.getElementById('modalTitle').innerText = `Book Ticket for ${destination} from ${from}`;
             document.getElementById('cityModal').style.display = "block";
+        }
+
+        function bookTicket() {
+            // Redirect to booking page
+// Log the selected value to the console
+            let time = document.querySelector('input[name="time"]:checked').value;
+            let date = document.getElementById('date').value;
+
+            window.location.href = `test5.html?des=${encodeURIComponent(selectedDestination)}&from=${encodeURIComponent(selectedFrom)}&time=${encodeURIComponent(time)}&date=${encodeURIComponent(date)}`;
         }
 
         document.querySelector('.close-btn').onclick = function() {

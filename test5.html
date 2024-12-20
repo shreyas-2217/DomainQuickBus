@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bus Ticket</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .ticket {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 350px;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      font-size: 14px;
+    }
+    .ticket-header {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+    .ticket-info {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .ticket-info div {
+      margin: 5px 0;
+    }
+    .ticket-footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #777;
+    }
+    .ticket-footer div {
+      margin-bottom: 5px;
+    }
+    .download-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .download-btn:hover {
+      background-color: #45a049;
+    }
+    canvas {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="ticket" class="ticket">
+    <div class="ticket-header">
+      Bus Ticket<br>
+      <span style="font-size: 12px;">QuickBus Company</span>
+    </div>
+    <div class="ticket-info">
+      <div><strong>Date:</strong> <span id="date-info"></span></div>
+      <div><strong>Time:</strong> <span id="time-info"></span></div>
+      <div><strong>From:</strong> <span id="from-info"></span></div>
+      <div><strong>To:</strong> <span id="destination-info"></span></div>
+      <div><strong>Seat No:</strong> 25A</div>
+      <div><strong>Ticket No:</strong> #<span id="ticket-info"></span></div>
+    </div>
+    <div class="ticket-footer">
+      <div><strong>Price:</strong> Rs.1500</div>
+      <div>Terms and Conditions Apply</div>
+      <div>Contact: QuickBus@Gmail.com</div>
+    </div>
+    <button class="download-btn" id="downloadBtn">Download as JPG</button>
+  </div>
+
+  <!-- Canvas element to render the image -->
+  <canvas id="ticketCanvas" width="350" height="500"></canvas>
+
+  <script>
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const Destination = urlParams.get('des'); 
+  const From = urlParams.get('from'); 
+  const Time = urlParams.get('time'); 
+  const Date = urlParams.get('date'); 
+  const number = Math.round(Math.random() * 1000);
+
+  document.getElementById('from-info').innerHTML = From;
+  document.getElementById('destination-info').innerHTML = Destination;
+  document.getElementById('time-info').innerHTML = Time;
+  document.getElementById('date-info').innerHTML = Date;
+  document.getElementById('ticket-info').innerHTML = number;
+
+    document.getElementById('downloadBtn').addEventListener('click', function () {
+      var canvas = document.getElementById('ticketCanvas');
+      var ctx = canvas.getContext('2d');
+
+      // Clear any previous drawing
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Set background color
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Set font style for ticket header
+      ctx.fillStyle = "#000";
+      ctx.font = "bold 18px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText("Bus Ticket", canvas.width / 2, 40);
+      ctx.font = "12px Arial";
+      ctx.fillText("Quick Bus", canvas.width / 2, 60);
+
+      // Set font style for ticket details
+      ctx.font = "14px Arial";
+      ctx.textAlign = "left";
+      ctx.fillText(`Date: ${Date}`, 20, 90);
+      ctx.fillText(`Time: ${Time}`, 20, 110);
+      ctx.fillText(`From: ${From}`, 20, 130);
+      ctx.fillText(`To: ${Destination}`, 20, 150);
+      ctx.fillText("Seat No: 25A", 20, 170);
+      ctx.fillText(`Ticket No: #${number}`, 20, 190);
+
+      // Footer
+      ctx.fillText("Price: Rs.1500", 20, 220);
+      ctx.fillText("Terms and Conditions Apply", 20, 240);
+      ctx.fillText("Contact: info@quickbus.com", 20, 260);
+
+      // Trigger download
+      var imageUrl = canvas.toDataURL("image/jpeg");
+
+      var link = document.createElement('a');
+      link.href = imageUrl;
+      link.download = 'bus_ticket.jpg';  // Set the filename
+      link.click();
+    });
+  </script>
+</body>
+</html>

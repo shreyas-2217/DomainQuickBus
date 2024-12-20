@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>QuickBus - Your Travel Companion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <style>
         body {
-            font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-family:'Poppins',sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
@@ -37,29 +40,33 @@
             font-size: 2.5em;
         }
 
+        nav {
+            margin-top: 30px;
+        }
         nav ul {
             list-style-type: none;
             padding: 0;
             text-align: center;
-            background-color: #34495e;
             margin: 0;
         }
 
         nav ul li {
             display: inline;
-            margin-right: 20px;
+            margin-right: 10px;
         }
 
         nav ul li a {
             color: white;
             text-decoration: none;
             font-size: 18px;
-            padding: 10px 15px;
-            border-radius: 5px;
+            padding: 5px 15px;
+            transition: 0.5s ease-in-out;
         }
 
         nav ul li a:hover {
-            background-color: #16a085;
+            border-bottom: 1px solid white;
+            text-decoration: none;
+            color: inherit;
         }
 
         section {
@@ -241,6 +248,16 @@
         <img style="align-items:end; width:90px; position: absolute; left: 40px; top: 10px;" src="logo.webp" alt="QuickBus Logo"></img>
         <h1 style="color:#ccc;">Welcome to QuickBus</h1>
         <p style="color: #ccc;">Your one-stop destination for bus ticket booking!</p>
+        <nav>
+            <ul>
+                <li><a href="About.html"><i class="fas fa-info-circle"></i>About Us</a></li>
+                <li><a href="service.html"><i class="fas fa-cogs"></i>Our Services</a></li>
+                <li><a href="contact.html"><i class="fas fa-phone-alt"></i>Contact</a></li>
+                <li><a href="flexbox.html"><i class="fas fa-map-marker-alt"></i>Destinations</a></li>
+                <li><a href="registration.html"><i class="fas fa-user-plus"></i>Register/Login</a></li>
+                <li><a href="location.html"><i class="fa-solid fa-magnifying-glass"></i>Track Your Location</a></li>
+            </ul>
+        </nav>
     </header>
 
 <div class="parallax"></div>
@@ -251,16 +268,7 @@
 
 <div class="parallax"></div>
 
-    <nav>
-        <ul>
-            <li><a href="About.html"><i class="fas fa-info-circle"></i>About Us</a></li>
-            <li><a href="service.html"><i class="fas fa-cogs"></i>Our Services</a></li>
-            <li><a href="contact.html"><i class="fas fa-phone-alt"></i>Contact</a></li>
-            <li><a href="flexbox.html"><i class="fas fa-map-marker-alt"></i>Destinations offered</a></li>
-            <li><a href="registration.html"><i class="fas fa-user-plus"></i>Register/Login Here</a></li>
-            <li><a href="Get_my_loc.html"></a></li>
-        </ul>
-    </nav>
+    
     
         <div class="container">
         <div id="imageCarousel" class="carousel slide" data-ride="carousel">
