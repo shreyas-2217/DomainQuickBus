@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="initial" id="btn-container">
+      <button id="fetch--btn">
+        <span>Show All MTours</span>
+      </button>
+    </div>
+
+    <div class="tour" id="tour-list"></div>
+  </body>
+</html>
+
+<script>
+  // Create an AJAX function to fetch movie data
+  function fetchMovies() {
+    // Open the connection
+    const xhr = new XMLHttpRequest();
+
+    // Request Initialization
+    const url = "http://localhost:5000/api/quickbus";
+
+    // Open the connection
+    xhr.open("GET", url, true); // Method, URL, Asynchronous
+
+    // Use the callback method to handle the server response
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        // Request finished and response is ready
+        if (xhr.status === 200) {
+          // "OK" response from server
+          try {
+            // Parse the JSON response
+            const response = JSON.parse(xhr.responseText);
+
+            // Extract the movies array from the response
+            const tours = response.data;
+
+            // Call a function to display the movies on the page
+            displayMovies(tour);
+          } catch (error) {
+            console.error("Error parsing JSON response:", error);
+          }
+        } else {
+          console.error("Error fetching tour: ", xhr.statusText);
+        }
+      }
+    };
+
+    // Send the request
+    xhr.send();
+  }
+
+</script>
+
