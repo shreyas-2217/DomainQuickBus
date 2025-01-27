@@ -1,63 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div class="initial" id="btn-container">
-      <button id="fetch--btn">
-        <span>Show All MTours</span>
-      </button>
-    </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bus Ticket Booking</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    form {
+      max-width: 400px;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+    input, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    #response {
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Bus Ticket Booking</h1>
+  <form onsubmit="event.preventDefault(); bookTicket();">
+    <label for="busNumber">Bus Number:</label>
+    <input type="text" id="busNumber" placeholder="Enter Bus Number" required>
 
-    <div class="tour" id="tour-list"></div>
-  </body>
-</html>
+    <label for="passengerName">Passenger Name:</label>
+    <input type="text" id="passengerName" placeholder="Enter Your Name" required>
 
-<script>
-  // Create an AJAX function to fetch movie data
-  function fetchMovies() {
-    // Open the connection
-    const xhr = new XMLHttpRequest();
+    <label for="travelDate">Travel Date:</label>
+    <input type="date" id="travelDate" required>
 
-    // Request Initialization
-    const url = "http://localhost:5000/api/quickbus";
+    <button type="submit">Book Ticket</button>
+  </form>
 
-    // Open the connection
-    xhr.open("GET", url, true); // Method, URL, Asynchronous
+  <div id="response"></div>
 
-    // Use the callback method to handle the server response
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-        // Request finished and response is ready
-        if (xhr.status === 200) {
-          // "OK" response from server
-          try {
-            // Parse the JSON response
+  <script>
+    function bookTicket() {
+      let xhr = new XMLHttpRequest();
+      const url = "https://jsonplaceholder.typicode.com/posts";
+      xhr.open("POST", url, true);
+
+      xhr.setRequestHeader("Content-Type", "application/json");
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 201) {
             const response = JSON.parse(xhr.responseText);
 
-            // Extract the movies array from the response
-            const tours = response.data;
+            const busNumber = document.getElementById("busNumber").value;
+            const passengerName = document.getElementById("passengerName").value;
+            const travelDate = document.getElementById("travelDate").value;
 
-            // Call a function to display the movies on the page
-            displayMovies(tour);
-          } catch (error) {
-            console.error("Error parsing JSON response:", error);
+            document.getElementById("response").innerHTML = `
+              <dialog open style="color: green;">
+                Booking Successful!<br>
+                <strong>Booking ID:</strong> ${response.id}<br>
+                <strong>Bus Number:</strong> ${busNumber}<br>
+                <strong>Passenger Name:</strong> ${passengerName}<br>
+                <strong>Travel Date:</strong> ${travelDate}
+              </dialog>`;
+          } else {
+            document.getElementById("response").innerHTML = `
+              <p style="color: red;">Failed to book ticket. Please try again later.</p>`;
           }
-        } else {
-          console.error("Error fetching tour: ", xhr.statusText);
         }
-      }
-    };
+      };
 
-    // Send the request
-    xhr.send();
-  }
+      const data = JSON.stringify({
+        busNumber: document.getElementById("busNumber").value,
+        passengerName: document.getElementById("passengerName").value,
+        travelDate: document.getElementById("travelDate").value
+      });
 
-</script>
-
+      xhr.send(data);
+    }
+  </script>
+</body>
+</html>
